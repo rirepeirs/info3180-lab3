@@ -1,16 +1,11 @@
 from app import app
 from flask import render_template, request, redirect, url_for, flash
-from flask import Flask, flash, redirect, render_template, \
-     request, url_for
 from app import mail
 from flask_mail import Message 
-from forms import MyForm
+from forms import Contact
 ###
 # Routing for your application.
 ###
-
-app = Flask(__name__)
-app.secret_key = 'hithere'
 
 @app.route('/')
 def home():
@@ -25,38 +20,26 @@ def about():
 
 @app.route("/contact",methods=['POST'])
 def contact():
+    app.logger.debug(app.config['MAIL_USERNAME'])
+    app.logger.debug(app.config['MAIL_PASSWORD'])
+    app.logger.debug(app.config['MAIL_PORT'])
+    form= Contact()
+    if form.validate_on_submit():
+        name= form.name.data
+        email= form.email.data
+        subject= form.subject.data
+        message= form.message.data
+        msg= Message(subject,
+            sender=(name, email),   
+            recipients=["to@example.com"])
+        msg.body= message
+        mail.send(msg)
+        flash('Sent Successfully')
+        return redirect('/')
     return render_template('contact.html')
 ###
 # The functions below should be applicable to all Flask apps.
 ###
-
-@app.route('/home', methods=['GET', 'POST'])
-def login():
-    error = None
-    if request.method == 'POST':
-        if request.form['email'] != 'email':
-            error = 'Invalid cemail'
-        else:
-            flash('Message Sent')
-            return redirect(url_for('home'))
-    return render_template('home.html', error=error)
-
-
-@app.route('/submit', methods=['GET', 'POST'])
-def submit():
-    form = MyForm()
-    if form.validate_on_submit():
-        name = form.name.data
-        email = form.email.data
-        subject = form.subject.data
-        message = form.message.data
-        msg = Message("subject",
-                sender=("name", "email"),
-                recipients=["to@example.com"])
-        msg.body = 'message'
-        mail.send(msg) 
-    return render_template('contact.html',
-    form=form)
 
 
 # Flash errors from the form if validation fails

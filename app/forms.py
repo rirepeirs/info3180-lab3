@@ -3,7 +3,7 @@ from flask_wtf import FlaskForm
 from wtforms import StringField
 from wtforms.validators import InputRequired
 
-class MyForm(FlaskForm):
+class Contact(FlaskForm):
  
  name = StringField('Name',validators=[InputRequired()])
  email = StringField('Name',validators=[InputRequired()])
