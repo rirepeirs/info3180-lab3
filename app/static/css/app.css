@@ -1,3 +1,26 @@
 body {
     padding-top: 5rem;
 }
+
+
+.contact-class{
+    font-family: "Roboto", sans-serif;
+    font-style: normal;
+}
+
+.form-group{
+    margin: 10px;
+}
+input, textarea .form-input{
+   border-radius: 30px; 
+}
+
+label .form-label{
+    display: block;
+}
+
+.form-btn{
+    padding: 15px;
+    border-radius: 30px;
+    background-color: #006FB9;
+}
